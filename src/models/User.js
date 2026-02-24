@@ -19,17 +19,27 @@ const User = sequelize.define('User', {
   },
   password: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: true
   },
   isPremium: {
     type: DataTypes.BOOLEAN,
     defaultValue: false
   },
   profilePicture: {
-  type: DataTypes.STRING,
-  allowNull: true,
-  defaultValue: null
-}
+    type: DataTypes.STRING,
+    allowNull: true,
+    defaultValue: null
+  },
+  googleId: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    defaultValue: null
+  },
+  appleId: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    defaultValue: null
+  },
 }, {
   tableName: 'users',
   timestamps: true
