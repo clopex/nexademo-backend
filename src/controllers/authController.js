@@ -76,6 +76,45 @@ const login = async (req, res) => {
   }
 };
 
+const updateProfile = async (req, res) => {
+  try {
+    const { fullName, profilePicture, gender, phone, country, city, address } = req.body;
+
+    const user = await User.findByPk(req.userId);
+    if (!user) return res.status(404).json({ error: 'User not found' });
+
+    await user.update({
+      ...(fullName && { fullName }),
+      ...(profilePicture && { profilePicture }),
+      ...(gender !== undefined && { gender }),
+      ...(phone !== undefined && { phone }),
+      ...(country !== undefined && { country }),
+      ...(city !== undefined && { city }),
+      ...(address !== undefined && { address }),
+    });
+
+    res.json({
+      message: 'Profile updated successfully',
+      user: {
+        id: user.id,
+        fullName: user.fullName,
+        email: user.email,
+        isPremium: user.isPremium,
+        profilePicture: user.profilePicture,
+        gender: user.gender,
+        phone: user.phone,
+        country: user.country,
+        city: user.city,
+        address: user.address,
+      }
+    });
+
+  } catch (error) {
+    console.error('Update profile error:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+
 const getMe = async (req, res) => {
   try {
     const user = await User.findByPk(req.userId, {
@@ -173,4 +212,4 @@ const appleLogin = async (req, res) => {
   }
 };
 
-module.exports = { register, login, getMe, googleLogin, appleLogin };
+module.exports = { register, login, getMe, updateProfile, googleLogin, appleLogin };
