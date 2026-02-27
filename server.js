@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const { sequelize } = require('./src/config/database');
 const authRoutes = require('./src/routes/auth');
+const tipsRoutes = require('./src/routes/tips');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -15,6 +16,8 @@ app.use('/api/auth', authRoutes);
 app.get('/', (req, res) => {
   res.json({ status: 'NexaDemo API is running!', version: '1.0' });
 });
+
+app.use('/api/tips', tipsRoutes);
 
 async function startServer() {
   try {
