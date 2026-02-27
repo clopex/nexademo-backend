@@ -1,4 +1,4 @@
-const DailyTip = require('../models/DailyTip');
+const DailyTip = require('../models/DailyTips');
 
 const FALLBACK_TIP = "Try scanning any product with AI Camera to instantly get detailed information about it.";
 
