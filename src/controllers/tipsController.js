@@ -36,28 +36,27 @@ const getDailyTip = async (req, res) => {
       return res.json({ tip: tipRecord.tip, date: tipRecord.date, cached: true });
     }
 
-    // Generate new tip with OpenAI
-    const openaiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
+    const openaiResponse = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${process.env.GROQ_API_KEY}`
+  },
+  body: JSON.stringify({
+    model: 'llama-3.1-8b-instant',
+    max_tokens: 100,
+    messages: [
+      {
+        role: 'system',
+        content: 'You are a helpful assistant for a smart personal assistant app called NexaDemo. The app has features: AI camera object detection, AI chat, voice to text, premium subscriptions, and video calls. Generate short, practical, engaging tips about using the app or related productivity advice. Keep it under 2 sentences.'
       },
-      body: JSON.stringify({
-        model: 'gpt-4o-mini',
-        max_tokens: 100,
-        messages: [
-          {
-            role: 'system',
-            content: 'You are a helpful assistant for a smart personal assistant app called NexaDemo. The app has features: AI camera object detection, AI chat, voice to text, premium subscriptions, and video calls. Generate short, practical, engaging tips about using the app or related productivity advice. Keep it under 2 sentences.'
-          },
-          {
-            role: 'user',
-            content: `Generate a unique tip of the day for ${today}. Make it different from common tips. Be specific and actionable.`
-          }
-        ]
-      })
-    });
+      {
+        role: 'user',
+        content: `Generate a unique tip of the day for ${today}. Make it different from common tips. Be specific and actionable.`
+      }
+    ]
+  })
+});
 
     if (!openaiResponse.ok) {
       throw new Error('OpenAI API failed');
