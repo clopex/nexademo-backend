@@ -25,6 +25,14 @@ const DailyTip = sequelize.define('DailyTip', {
 
 const FALLBACK_TIP = "Try scanning any product with AI Camera to instantly get detailed information about it.";
 
+const deleteTodayTip = async (req, res) => {
+  const today = new Date().toISOString().split('T')[0];
+  await DailyTip.destroy({ where: { date: today } });
+  res.json({ message: 'Deleted' });
+};
+
+module.exports = { getDailyTip, deleteTodayTip, DailyTip };
+
 const getDailyTip = async (req, res) => {
   try {
     const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
@@ -48,7 +56,7 @@ const getDailyTip = async (req, res) => {
     messages: [
       {
         role: 'system',
-        content: 'You are a helpful assistant for a smart personal assistant app called NexaDemo. The app has features: AI camera object detection, AI chat, voice to text, premium subscriptions, and video calls. Generate short, practical, engaging tips about using the app or related productivity advice. Keep it under 2 sentences.'
+content: 'You are a helpful assistant for a smart personal assistant app called NexaDemo. The app has features: AI camera object detection, AI chat, voice to text, premium subscriptions, and video calls. Generate short, practical, engaging tips. Maximum 1 sentence. No quotes. No date prefix. Just the tip text directly.'
       },
       {
         role: 'user',
@@ -77,4 +85,4 @@ const getDailyTip = async (req, res) => {
   }
 };
 
-module.exports = { getDailyTip, DailyTip };
+module.exports = { getDailyTip, DailyTip, deleteTodayTip };
