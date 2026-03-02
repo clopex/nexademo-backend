@@ -4,6 +4,7 @@ const cors = require('cors');
 const { sequelize } = require('./src/config/database');
 const authRoutes = require('./src/routes/auth');
 const tipsRoutes = require('./src/routes/tips');
+const aiRoutes = require('./src/routes/ai');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -18,6 +19,8 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/tips', tipsRoutes);
+app.use('/api/ai', aiRoutes);
+
 
 async function startServer() {
   try {
