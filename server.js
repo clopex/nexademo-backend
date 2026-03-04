@@ -5,13 +5,14 @@ const { sequelize } = require('./src/config/database');
 const authRoutes = require('./src/routes/auth');
 const tipsRoutes = require('./src/routes/tips');
 const aiRoutes = require('./src/routes/ai');
+const paymentsRoutes = require('./src/routes/payments');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
-
+app.use('/api/payments', paymentsRoutes);
 app.use('/api/auth', authRoutes);
 
 app.get('/', (req, res) => {
