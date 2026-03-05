@@ -107,4 +107,26 @@ const getPaymentHistory = async (req, res) => {
   }
 };
 
-module.exports = { createPaymentIntent, confirmPayment, getPaymentHistory };
+const activatePremium = async (req, res) => {
+  try {
+    const user = await User.findByPk(req.userId);
+    if (!user) return res.status(404).json({ error: 'User not found' });
+
+    await user.update({ isPremium: true });
+
+    res.json({
+      message: 'Premium activated!',
+      user: {
+        id: user.id,
+        fullName: user.fullName,
+        email: user.email,
+        isPremium: user.isPremium
+      }
+    });
+  } catch (error) {
+    console.error('Activate premium error:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+
+module.exports = { createPaymentIntent, confirmPayment, getPaymentHistory, activatePremium };

@@ -6,5 +6,6 @@ const authMiddleware = require('../middleware/authMiddleware');
 router.post('/create-intent', authMiddleware, createPaymentIntent);
 router.post('/confirm', authMiddleware, confirmPayment);
 router.get('/history', authMiddleware, getPaymentHistory);
+router.post('/activate-premium', authMiddleware, activatePremium);
 
 module.exports = router;
