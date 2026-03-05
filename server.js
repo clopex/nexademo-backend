@@ -6,7 +6,7 @@ const authRoutes = require('./src/routes/auth');
 const tipsRoutes = require('./src/routes/tips');
 const aiRoutes = require('./src/routes/ai');
 const paymentsRoutes = require('./src/routes/payments');
-
+const agoraRoutes = require('./src/routes/agora');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -14,6 +14,7 @@ app.use(cors());
 app.use(express.json());
 app.use('/api/payments', paymentsRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/agora', agoraRoutes);
 
 app.get('/', (req, res) => {
   res.json({ status: 'NexaDemo API is running!', version: '1.0' });
