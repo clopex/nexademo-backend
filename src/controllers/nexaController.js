@@ -36,8 +36,26 @@ Supported actions:
     if (!content) return res.status(503).json({ error: 'AI unavailable' });
 
     // Parse JSON from response
-    const parsed = JSON.parse(content);
-    res.json(parsed);
+    let parsed;
+try {
+    // Pokušaj direktni parse
+    parsed = JSON.parse(content);
+} catch {
+    // Pokušaj pronaći JSON unutar teksta
+    const jsonMatch = content.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+        try {
+            parsed = JSON.parse(jsonMatch[0]);
+        } catch {
+            // Fallback — unknown command
+            parsed = { action: 'unknown', parameters: {} };
+        }
+    } else {
+        parsed = { action: 'unknown', parameters: {} };
+    }
+}
+
+res.json(parsed);
 
   } catch (error) {
     console.error('Nexa parse error:', error);
