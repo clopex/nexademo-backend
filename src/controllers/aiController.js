@@ -47,6 +47,9 @@ const chat = async (req, res) => {
     const groqData = await groqResponse.json();
     const reply = groqData.choices[0].message.content.trim();
 
+    if (!reply) {
+    return res.status(503).json({ error: 'AI temporarily unavailable, please try again' });
+    }
     // Save assistant message
     await ChatMessage.create({ userId, role: 'assistant', content: reply });
 
