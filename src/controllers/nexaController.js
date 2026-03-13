@@ -11,6 +11,7 @@ Supported actions:
 - open_ai_chat: { "action": "open_ai_chat", "parameters": { "message": "initial message" } }
 - start_scan: { "action": "start_scan", "parameters": {} }
 - make_call: { "action": "make_call", "parameters": { "contact": "contact name" } }
+- search_places: { "action": "search_places", "parameters": { "query": "any places query the user asked for, such as coffee shops, gyms, pharmacies, hotels, restaurants, or any nearby place search" } }
 - navigate: { "action": "navigate", "parameters": { "tab": "home|ai|premium|connect|profile" } }
 - unknown: { "action": "unknown", "parameters": {} }`;
 
