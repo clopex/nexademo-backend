@@ -1,0 +1,18 @@
+{
+  "formatVersion": 1,
+  "organizationName": "NexaDemo",
+  "passTypeIdentifier": "pass.com.example.nexademo",
+  "serialNumber": "placeholder",
+  "teamIdentifier": "TEAMID",
+  "description": "Saved place from Nexa Places",
+  "logoText": "Nexa Places",
+  "foregroundColor": "rgb(255, 255, 255)",
+  "labelColor": "rgb(216, 216, 216)",
+  "backgroundColor": "rgb(20, 20, 28)",
+  "generic": {
+    "primaryFields": [],
+    "secondaryFields": [],
+    "auxiliaryFields": [],
+    "backFields": []
+  }
+}
