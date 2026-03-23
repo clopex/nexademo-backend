@@ -67,6 +67,32 @@ function buildMapsURL(place) {
   return `https://maps.apple.com/?q=${query}&ll=${place.latitude},${place.longitude}`;
 }
 
+function normalizeCategoryName(categoryName) {
+  if (!categoryName) {
+    return null;
+  }
+
+  const trimmed = String(categoryName).trim();
+  if (!trimmed) {
+    return null;
+  }
+
+  const withoutPrefix = trimmed.replace(/^mkpoicategory/i, '');
+  const spaced = withoutPrefix
+    .replace(/([a-z])([A-Z])/g, '$1 $2')
+    .replace(/[_-]+/g, ' ')
+    .trim();
+
+  if (!spaced) {
+    return null;
+  }
+
+  return spaced
+    .split(/\s+/)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
+    .join(' ');
+}
+
 function compactFields(fields) {
   return fields.filter((field) => field.value !== null && field.value !== undefined && String(field.value).trim() !== '');
 }
@@ -81,6 +107,7 @@ async function createPlaceWalletPass(place) {
     .createHash('sha1')
     .update(`${place.userId}:${place.name}:${place.address}:${place.latitude}:${place.longitude}`)
     .digest('hex');
+  const categoryName = normalizeCategoryName(place.categoryName);
 
   const pass = await PKPass.from(
     {
@@ -89,14 +116,14 @@ async function createPlaceWalletPass(place) {
     },
     {
       serialNumber,
-      description: 'Saved place from Nexa Places',
+      description: 'Saved place',
       organizationName,
       passTypeIdentifier,
       teamIdentifier,
       logoText: 'Nexa Places',
-      foregroundColor: 'rgb(255, 255, 255)',
-      labelColor: 'rgb(216, 216, 216)',
-      backgroundColor: 'rgb(20, 20, 28)',
+      foregroundColor: 'rgb(22, 22, 28)',
+      labelColor: 'rgb(110, 110, 120)',
+      backgroundColor: 'rgb(245, 245, 247)',
       associatedStoreIdentifiers: [],
       locations: [
         {
@@ -113,7 +140,7 @@ async function createPlaceWalletPass(place) {
       {
         key: 'category',
         label: 'CATEGORY',
-        value: place.categoryName
+        value: categoryName
       }
     ])
   );
