@@ -104,53 +104,64 @@ async function createPlaceWalletPass(place) {
           longitude: place.longitude,
           relevantText: `You saved ${place.name} in Nexa Places.`
         }
-      ],
-      generic: {
-        primaryFields: [
-          {
-            key: 'place-name',
-            label: 'PLACE',
-            value: place.name
-          }
-        ],
-        secondaryFields: compactFields([
-          {
-            key: 'category',
-            label: 'CATEGORY',
-            value: place.categoryName
-          },
-          {
-            key: 'address',
-            label: 'ADDRESS',
-            value: place.address
-          }
-        ]),
-        auxiliaryFields: compactFields([
-          {
-            key: 'phone',
-            label: 'PHONE',
-            value: place.phoneNumber
-          }
-        ]),
-        backFields: compactFields([
-          {
-            key: 'maps',
-            label: 'OPEN IN MAPS',
-            value: buildMapsURL(place)
-          },
-          {
-            key: 'deep-link',
-            label: 'OPEN IN NEXADEMO',
-            value: place.appLaunchURL
-          },
-          {
-            key: 'coordinates',
-            label: 'COORDINATES',
-            value: `${place.latitude}, ${place.longitude}`
-          }
-        ])
-      }
+      ]
     }
+  );
+
+  pass.headerFields.push(
+    ...compactFields([
+      {
+        key: 'category',
+        label: 'CATEGORY',
+        value: place.categoryName
+      }
+    ])
+  );
+
+  pass.primaryFields.push({
+    key: 'place-name',
+    label: 'PLACE',
+    value: place.name
+  });
+
+  pass.secondaryFields.push(
+    ...compactFields([
+      {
+        key: 'address',
+        label: 'ADDRESS',
+        value: place.address
+      }
+    ])
+  );
+
+  pass.auxiliaryFields.push(
+    ...compactFields([
+      {
+        key: 'phone',
+        label: 'PHONE',
+        value: place.phoneNumber
+      }
+    ])
+  );
+
+  pass.backFields.push(
+    ...compactFields([
+      {
+        key: 'maps',
+        label: 'OPEN IN MAPS',
+        value: buildMapsURL(place)
+      },
+      {
+        key: 'deep-link',
+        label: 'OPEN IN NEXADEMO',
+        value: place.appLaunchURL
+      },
+      {
+        key: 'coordinates',
+        label: 'COORDINATES',
+        value: `${place.latitude}, ${place.longitude}`
+      }
+    ])
   );
 
   pass.setBarcodes(place.appLaunchURL || buildMapsURL(place));
