@@ -105,7 +105,7 @@ async function createPlaceWalletPass(place) {
 
   const serialNumber = crypto
     .createHash('sha1')
-    .update(`${place.userId}:${place.name}:${place.address}:${place.latitude}:${place.longitude}`)
+    .update(`${place.userId}:${place.name}:${place.address}:${place.latitude}:${place.longitude}:${place.scheduledAt.toISOString()}`)
     .digest('hex');
   const categoryName = normalizeCategoryName(place.categoryName);
 
@@ -116,11 +116,11 @@ async function createPlaceWalletPass(place) {
     },
     {
       serialNumber,
-      description: 'Saved place',
+      description: 'Visit plan',
       organizationName,
       passTypeIdentifier,
       teamIdentifier,
-      logoText: 'Nexa Places',
+      logoText: 'Visit Plan',
       foregroundColor: 'rgb(255, 255, 255)',
       labelColor: 'rgb(216, 216, 216)',
       backgroundColor: 'rgb(10, 10, 15)',
@@ -129,7 +129,7 @@ async function createPlaceWalletPass(place) {
         {
           latitude: place.latitude,
           longitude: place.longitude,
-          relevantText: `You saved ${place.name} in Nexa Places.`
+          relevantText: `Planned visit: ${place.planTitle}`
         }
       ]
     }
@@ -138,21 +138,31 @@ async function createPlaceWalletPass(place) {
   pass.headerFields.push(
     ...compactFields([
       {
-        key: 'category',
-        label: 'CATEGORY',
-        value: categoryName
+        key: 'date',
+        label: 'DATE',
+        value: place.scheduledDateText
+      },
+      {
+        key: 'time',
+        label: 'TIME',
+        value: place.scheduledTimeText
       }
     ])
   );
 
   pass.primaryFields.push({
-    key: 'place-name',
-    label: 'PLACE',
-    value: place.name
+    key: 'plan-title',
+    label: 'PLAN',
+    value: place.planTitle
   });
 
   pass.secondaryFields.push(
     ...compactFields([
+      {
+        key: 'place-name',
+        label: 'PLACE',
+        value: place.name
+      },
       {
         key: 'address',
         label: 'ADDRESS',
@@ -164,9 +174,9 @@ async function createPlaceWalletPass(place) {
   pass.auxiliaryFields.push(
     ...compactFields([
       {
-        key: 'phone',
-        label: 'PHONE',
-        value: place.phoneNumber
+        key: 'category',
+        label: 'CATEGORY',
+        value: categoryName
       }
     ])
   );
@@ -187,11 +197,14 @@ async function createPlaceWalletPass(place) {
         key: 'coordinates',
         label: 'COORDINATES',
         value: `${place.latitude}, ${place.longitude}`
+      },
+      {
+        key: 'note',
+        label: 'NOTE',
+        value: place.note
       }
     ])
   );
-
-  pass.setBarcodes(place.appLaunchURL || buildMapsURL(place));
 
   return pass.getAsBuffer();
 }

@@ -9,18 +9,28 @@ const createWalletPass = async (req, res) => {
       latitude,
       longitude,
       phoneNumber = null,
-      appLaunchURL = null
+      appLaunchURL = null,
+      planTitle,
+      scheduledAt,
+      scheduledDateText,
+      scheduledTimeText,
+      note = null
     } = req.body ?? {};
 
-    if (!name || !address) {
-      return res.status(400).json({ error: 'Name and address are required' });
+    if (!name || !address || !planTitle || !scheduledAt || !scheduledDateText || !scheduledTimeText) {
+      return res.status(400).json({ error: 'Name, address, plan title, and scheduled visit details are required' });
     }
 
     const parsedLatitude = Number(latitude);
     const parsedLongitude = Number(longitude);
+    const parsedScheduledAt = new Date(scheduledAt);
 
     if (Number.isFinite(parsedLatitude) === false || Number.isFinite(parsedLongitude) === false) {
       return res.status(400).json({ error: 'Latitude and longitude are required' });
+    }
+
+    if (Number.isNaN(parsedScheduledAt.getTime())) {
+      return res.status(400).json({ error: 'Scheduled date is invalid' });
     }
 
     const pkpassBuffer = await createPlaceWalletPass({
@@ -31,14 +41,19 @@ const createWalletPass = async (req, res) => {
       longitude: parsedLongitude,
       phoneNumber: phoneNumber ? String(phoneNumber).trim() : null,
       appLaunchURL: appLaunchURL ? String(appLaunchURL).trim() : null,
+      planTitle: String(planTitle).trim(),
+      scheduledAt: parsedScheduledAt,
+      scheduledDateText: String(scheduledDateText).trim(),
+      scheduledTimeText: String(scheduledTimeText).trim(),
+      note: note ? String(note).trim() : null,
       userId: req.userId
     });
 
-    const safeName = String(name)
+    const safeName = String(planTitle)
       .trim()
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '') || 'nexa-place';
+      .replace(/^-+|-+$/g, '') || 'visit-plan';
 
     res.setHeader('Content-Type', 'application/vnd.apple.pkpass');
     res.setHeader('Content-Disposition', `attachment; filename="${safeName}.pkpass"`);
