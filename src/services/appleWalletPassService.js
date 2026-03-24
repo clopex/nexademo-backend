@@ -121,9 +121,9 @@ async function createPlaceWalletPass(place) {
       passTypeIdentifier,
       teamIdentifier,
       logoText: 'Nexa Places',
-      foregroundColor: 'rgb(22, 22, 28)',
-      labelColor: 'rgb(110, 110, 120)',
-      backgroundColor: 'rgb(245, 245, 247)',
+      foregroundColor: 'rgb(255, 255, 255)',
+      labelColor: 'rgb(216, 216, 216)',
+      backgroundColor: 'rgb(10, 10, 15)',
       associatedStoreIdentifiers: [],
       locations: [
         {
